@@ -10,11 +10,25 @@ def is_valid_status(status: str) -> bool:
     """Checks if the provided status is valid."""
     pass
 
-
+def is_valid_id(soldier_id: int) -> bool:
+    """Checks if the provided soldier ID is valid."""
+    try:
+        int(soldier_id)
+        return True
+    except ValueError:
+        print("Invalid ID. Please enter a numeric value.")
+        return False
+        
+  
 
 def is_valid_name(name: str) -> bool:
     """Checks if the provided name is valid."""
-    pass
+    try:
+        str(name)
+        return True             
+    except ValueError:
+        print("Invalid name. Please enter a valid string.")
+        return False    
 
 def soldier_has_duty(soldier: dict, duty_name: str) -> bool:
     """Checks if a soldier has a specific duty assigned."""
