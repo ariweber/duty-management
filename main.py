@@ -182,7 +182,8 @@ def main() -> None:
     למה הפונקציה קיימת:
     נקודת הכניסה לתוכנית. מנהלת את הזרימה הראשית.
     """
-    while True:
+    flag = True
+    while flag:
         show_menu()
         choice = get_user_choice()
 
@@ -200,7 +201,7 @@ def main() -> None:
             handle_view_soldier_duties()
         elif choice == "7":
             print("Goodbye!")
-            break
+            flag =  False
         else:
             print("Invalid choice. Please try again.")
 
