@@ -1,44 +1,164 @@
-MAX_SOLDIER_ID = 9999999
+MAX_SOLDIER_ID = 9
+DAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday"]
+STATUS = ["pending", "completed", "missed"]
+
+def find_soldier_by_id(soldier_id: int, data: list) -> dict | None:
+    """
+    מחפשת חייל לפי id ומחזירה אותו.
+
+    סוג: פונקציית עזר (Helper Function)
+
+    מקבלת:
+        soldier_id (int): מספר אישי של החייל
+
+    מחזירה:
+        dict | None: מילון של החייל אם נמצא, None אם לא נמצא
+
+    זורקת: כלום - מחזירה None במקרה שלא נמצא
+
+    למה הפונקציה קיימת:
+    פונקציה זו משמשת הרבה מקומות במערכת (DRY).
+    במקום לחזור על לולאת חיפוש בכל פונקציה,
+    יש פונקציה אחת שעושה את זה.
+    מחזירה None במקום לזרוק exception - מאפשרת גמישות.
+    """
+    for soldier in data:
+        if soldier["id"] == soldier_id:
+            return soldier
+    return None
 
 
-def find_soldier_by_id(soldier_id: int) -> dict | None:
-    """Finds a soldier by their ID and returns their information as a dictionary."""
-    pass
+def find_duty_by_name(duties: list, duty_name: str) -> dict | None:
+    """
+    מחפשת תורנות לפי שם ברשימת תורנויות.
 
-def find_soldier_by_name(name: str) -> dict | None:
-    """Finds a soldier by their name and returns their information as a dictionary."""
-    pass
+    סוג: פונקציית עזר (Helper Function)
+
+    מקבלת:
+        duties (list): רשימת תורנויות
+        duty_name (str): שם התורנות לחיפוש
+
+    מחזירה:
+        dict | None: מילון של התורנות אם נמצאה, None אם לא נמצאה
+
+    זורקת: כלום - מחזירה None במקרה שלא נמצא
+
+    למה הפונקציה קיימת:
+    פונקציה זו משמשת במספר מקומות (הוספת תורנות, עדכון סטטוס).
+    הפרדה של לוגיקת החיפוש למקום אחד.
+    מחזירה None במקום לזרוק exception - מאפשרת גמישות.
+    """
+    for duty in duties:
+        if duty["name"] == duty_name:
+            return duty
+    return None
+
 
 def is_valid_status(status: str) -> bool:
-    """Checks if the provided status is valid."""
-    pass
+    """
+    בודקת אם סטטוס הוא חוקי.
 
-def is_valid_id(soldier_id: int) -> bool:
+    סוג: פונקציית validation (בדיקת תקינות)
+
+    מקבלת:
+        status (str): הסטטוס לבדיקה
+
+    מחזירה:
+        bool: True אם הסטטוס חוקי (pending/completed/missed)
+              False אם לא חוקי
+
+    זורקת: כלום - תמיד מחזירה bool
+
+    למה הפונקציה קיימת:
+    בדיקת תקינות של סטטוס משמשת במספר מקומות.
+    במקום לחזור על הבדיקה, יש פונקציה אחת.
+    גם מקל על שינוי הסטטוסים החוקיים בעתיד.
+    פונקציות validation מחזירות bool ולא זורקות exceptions.
+    """
+    return status in {"pending", "completed", "missed"}
+
+
+def is_valid_id(soldier_id) -> bool:
     """Checks if the provided soldier ID is valid."""
     try:
         soldier_id = int(soldier_id)
-        if soldier_id > MAX_SOLDIER_ID:
-            print("Invalid ID. Please enter a valid soldier ID.")
+        if soldier_id < 0 or soldier_id > MAX_SOLDIER_ID:
             return False
         return True
-    except ValueError:
-        print("Invalid ID. Please enter a numeric value.")
+    except (ValueError, TypeError):
         return False
-        
-  
+
 
 def is_valid_name(name: str) -> bool:
-    """Checks if the provided name is valid."""
-    if isinstance(name, str) and name.strip():
-        return True
-    print("Invalid name. Please enter a valid string.")
-    return False
+    """
+    בודקת אם שם הוא תקין (לא ריק).
+
+    סוג: פונקציית validation (בדיקת תקינות)
+
+    מקבלת:
+        name (str): השם לבדיקה
+
+    מחזירה:
+        bool: True אם השם תקין (לא ריק)
+              False אם ריק
+
+    זורקת: כלום - תמיד מחזירה bool
+
+    למה הפונקציה קיימת:
+    בדיקת תקינות של שם משמשת במספר מקומות.
+    הפרדה של לוגיקת הבדיקה למקום אחד.
+    בעתיד אפשר להוסיף בדיקות נוספות (אורך מינימלי, תווים חוקיים).
+    פונקציות validation מחזירות bool ולא זורקות exceptions.
+    """
+    return isinstance(name, str) and bool(name.strip())
+
 
 def soldier_has_duty(soldier: dict, duty_name: str) -> bool:
-    """Checks if a soldier has a specific duty assigned."""
-    pass
+    """
+    בודקת אם לחייל יש תורנות עם שם מסוים.
+
+    סוג: פונקציית validation (בדיקת תקינות)
+
+    מקבלת:
+        soldier (dict): מילון של חייל
+        duty_name (str): שם התורנות לבדיקה
+
+    מחזירה:
+        bool: True אם התורנות קיימת לחייל
+              False אם לא קיימת
+
+    זורקת: כלום - תמיד מחזירה bool
+
+    למה הפונקציה קיימת:
+    בדיקה זו משמשת בהוספת תורנות (למנוע כפילויות).
+    הפרדה של הלוגיקה למקום אחד.
+    פונקציות validation מחזירות bool ולא זורקות exceptions.
+    """
+    for duty in soldier["duties"]:
+        if duty["name"] == duty_name:
+            return True
+    return False
 
 
 def is_valid_day(day: str) -> bool:
-    """Checks if the provided day is valid."""
-    pass
+    """
+    בודקת אם יום הוא חוקי (לא שישי או שבת).
+
+    סוג: פונקציית validation (בדיקת תקינות)
+
+    מקבלת:
+        day (str): היום לבדיקה
+
+    מחזירה:
+        bool: True אם היום חוקי (sunday-thursday)
+              False אם לא חוקי או אסור (friday/saturday או ערך לא תקין)
+
+    זורקת: כלום - תמיד מחזירה bool
+
+    למה הפונקציה קיימת:
+    בדיקת תקינות של יום משמשת בהוספת תורנות.
+    הפרדה של לוגיקת הבדיקה למקום אחד.
+    בעתיד אפשר לשנות את הימים החוקיים במקום אחד.
+    פונקציות validation מחזירות bool ולא זורקות exceptions.
+    """
+    return day.lower() in {"sunday", "monday", "tuesday", "wednesday", "thursday"}
